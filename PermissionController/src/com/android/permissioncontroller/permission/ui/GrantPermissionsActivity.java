@@ -67,7 +67,8 @@ import android.view.View.OnAttachStateChangeListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
+import android.graphics.Insets;
+import android.view.WindowInsets;
 import androidx.annotation.GuardedBy;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -390,7 +391,7 @@ public class GrantPermissionsActivity extends SettingsActivity
 
         setFinishOnTouchOutside(false);
 
-        setTitle(R.string.permission_request_title);
+        //setTitle(R.string.permission_request_title);
 
         if (DeviceUtils.isTelevision(this)) {
             mViewHandler = new com.android.permissioncontroller.permission.ui.television
@@ -651,7 +652,7 @@ public class GrantPermissionsActivity extends SettingsActivity
         // because the dialog title is already announced, as is the default selection which
         // is a text view containing the title.
         if (!DeviceUtils.isWear(this)) {
-            setTitle(message);
+           // setTitle(message);
         }
 
         mButtonVisibilities = getButtonsForPrompt(info.getPrompt(), info.getDeny(),
