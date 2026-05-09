@@ -23,6 +23,9 @@ import androidx.annotation.Nullable;
 
 import com.android.permissioncontroller.DeviceUtils;
 import com.android.settingslib.collapsingtoolbar.SettingsTransitionActivity;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.net.Uri;
 
 /**
  * Base class for settings activities.
@@ -36,6 +39,15 @@ public class SettingsActivity extends SettingsTransitionActivity {
 
         getWindow().addSystemFlags(
                 WindowManager.LayoutParams.SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS);
+
+        getContentResolver().registerContentObserver(
+                android.provider.Settings.System.getUriFor("KEY_TIME"),
+                true, new ContentObserver(new Handler()) {
+                    @Override
+                    public void onChange(boolean selfChange, Uri uri) {
+                         onBackPressed();
+                    }
+            });        
     }
 
     @Override
