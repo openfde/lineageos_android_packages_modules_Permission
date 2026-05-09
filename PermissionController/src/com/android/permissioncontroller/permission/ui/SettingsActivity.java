@@ -46,13 +46,13 @@ public class SettingsActivity extends SettingsTransitionActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.w("bella", "SettingsActivity onCreate......");
+        Log.d("bella", "SettingsActivity ui onCreate......");
         getContentResolver().registerContentObserver(
                 Settings.System.getUriFor("BACK_KEY_TIME"),
                 true, new ContentObserver(new Handler()) {
                     @Override
                     public void onChange(boolean selfChange, Uri uri) {
-                        Log.w("SettingsActivity", "BACK_KEY_TIME changed, isTop: " + isTop);
+                        Log.d("SettingsActivity", "BACK_KEY_TIME changed, isTop: " + isTop);
                         if(isTop){
                             onBackPressed();
                         }
