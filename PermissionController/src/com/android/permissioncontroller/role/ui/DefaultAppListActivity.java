@@ -26,7 +26,7 @@ import com.android.permissioncontroller.R;
 import com.android.permissioncontroller.role.ui.auto.AutoDefaultAppListFragment;
 import com.android.permissioncontroller.role.ui.handheld.HandheldDefaultAppListFragment;
 import com.android.permissioncontroller.role.ui.wear.WearDefaultAppListFragment;
-
+import android.util.Log;
 /**
  * Activity for the list of default apps.
  */

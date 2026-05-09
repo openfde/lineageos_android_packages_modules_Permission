@@ -18,15 +18,60 @@ package com.android.permissioncontroller.permission.ui;
 
 import com.android.permissioncontroller.DeviceUtils;
 import com.android.settingslib.collapsingtoolbar.SettingsTransitionActivity;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.UserHandle;
+import android.provider.Settings;
+import android.net.Uri;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import android.os.Bundle;
+import android.util.Log;
+
 
 /**
  * Parent activity that supports transitions
  */
 public class SettingsActivity extends SettingsTransitionActivity {
+     private boolean isTop;
+
     @Override
     protected boolean isSettingsTransitionEnabled() {
         return super.isSettingsTransitionEnabled() && !(DeviceUtils.isAuto(this)
                 || DeviceUtils.isTelevision(this) || DeviceUtils.isWear(this));
     }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("bella", "SettingsActivity ui onCreate......");
+        getContentResolver().registerContentObserver(
+                Settings.System.getUriFor("BACK_KEY_TIME"),
+                true, new ContentObserver(new Handler()) {
+                    @Override
+                    public void onChange(boolean selfChange, Uri uri) {
+                        Log.d("SettingsActivity", "BACK_KEY_TIME changed, isTop: " + isTop);
+                        if(isTop){
+                            onBackPressed();
+                        }
+                    }
+                });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isTop = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isTop = false;
+    }
+
 
 }

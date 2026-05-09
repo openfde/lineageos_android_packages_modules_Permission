@@ -23,12 +23,17 @@ import androidx.annotation.Nullable;
 
 import com.android.permissioncontroller.DeviceUtils;
 import com.android.settingslib.collapsingtoolbar.SettingsTransitionActivity;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.net.Uri;
+import android.util.Log;
 
 /**
  * Base class for settings activities.
  */
 // Made public for com.android.permissioncontroller.role.ui.specialappaccess
 public class SettingsActivity extends SettingsTransitionActivity {
+     private boolean isTop;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,11 +41,40 @@ public class SettingsActivity extends SettingsTransitionActivity {
 
         getWindow().addSystemFlags(
                 WindowManager.LayoutParams.SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS);
+
+        Log.d("bella", "SettingsActivity role onCreate......");
+        getContentResolver().registerContentObserver(
+                android.provider.Settings.System.getUriFor("KEY_TIME"),
+                true, new ContentObserver(new Handler()) {
+                    @Override
+                    public void onChange(boolean selfChange, Uri uri) {
+                        String keyTime =   android.provider.Settings.System.getString(
+                                getContentResolver(),
+                                "KEY_TIME");
+                        String pkgName = getPackageName() ;    
+                        Log.d("bella", "SettingsActivity role onChange...... isTop "+isTop + ",keyTime "+keyTime + ",pkgName "+pkgName);    
+                        if(keyTime != null && keyTime.contains(pkgName) ){
+                              onBackPressed();
+                        }
+                    }
+            });        
     }
 
     @Override
     protected boolean isSettingsTransitionEnabled() {
         return super.isSettingsTransitionEnabled() && !(DeviceUtils.isAuto(this)
                 || DeviceUtils.isTelevision(this) || DeviceUtils.isWear(this));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isTop = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isTop = false;
     }
 }

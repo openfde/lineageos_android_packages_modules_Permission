@@ -241,6 +241,15 @@ public class GrantPermissionsActivity extends SettingsActivity
             // Do not grab input focus and hide keyboard.
             getWindow().addFlags(FLAG_ALT_FOCUSABLE_IM);
         }
+		
+		View decorView = getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            decorView.setOnApplyWindowInsetsListener((v, insets) -> {
+                Insets captionBarInsets = insets.getInsets(WindowInsets.Type.captionBar());
+                v.setPaddingRelative(0, 80, 0, 0);
+                return insets;
+            });
+        }
 
         int permissionsSdkLevel;
         if (PackageManager.ACTION_REQUEST_PERMISSIONS_FOR_OTHER.equals(getIntent().getAction())) {
